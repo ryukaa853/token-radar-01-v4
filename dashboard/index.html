@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Token Radar — pre-token protocols ranked by implied value</title>
+<link rel="stylesheet" href="app.css">
+</head>
+<body>
+<header class="top">
+  <div>
+    <h1>Token Radar</h1>
+    <p class="sub">Pre-token protocols, ranked by what their token would be worth if the protocol's record stayed as it is. A protocol <em>records</em> no token — never that it has none.</p>
+  </div>
+  <div class="meta" id="meta"></div>
+</header>
+
+<section class="stats" id="stats" aria-label="Board statistics"></section>
+
+<section class="controls" aria-label="Board controls">
+  <label>Search <input id="q" type="search" placeholder="name or slug" autocomplete="off"></label>
+  <label>Category <select id="cat"><option value="">All categories</option></select></label>
+  <label>Show <select id="status">
+    <option value="pre">Pre-token board</option>
+    <option value="live">Live-token protocols</option>
+    <option value="all">Board + live</option>
+  </select></label>
+  <label>Sort by <select id="sort">
+    <option value="implied">Implied value</option>
+    <option value="tvl">TVL</option>
+    <option value="growth">7-day change</option>
+    <option value="age">Age</option>
+  </select></label>
+  <span class="count" id="count"></span>
+</section>
+
+<main>
+  <section id="detail" class="detail" hidden aria-label="Protocol detail"></section>
+
+  <section aria-label="Ranked board">
+    <h2>Ranked board <span class="hint">click a row for its detail and farm plan</span></h2>
+    <table id="board">
+      <thead><tr>
+        <th data-k="rank">#</th><th data-k="name">Protocol</th><th data-k="category">Category</th>
+        <th data-k="chains">Chains</th><th data-k="tvl">TVL</th><th data-k="growth">7d</th>
+        <th data-k="age">Age</th><th data-k="multiple">Fit &times;</th><th data-k="implied">Implied value</th>
+      </tr></thead>
+      <tbody id="rows"></tbody>
+    </table>
+  </section>
+
+  <section id="livewrap" aria-label="Live-token protocols" hidden>
+    <h2>Live-token protocols <span class="hint">their token already trades — shown at the market's own value, never ranked</span></h2>
+    <table id="live">
+      <thead><tr><th>Protocol</th><th>Category</th><th>Chains</th><th>TVL</th><th>Market cap</th><th>7d</th><th>FDV / TVL</th></tr></thead>
+      <tbody id="liverows"></tbody>
+    </table>
+  </section>
+
+  <section aria-label="How the value is fitted">
+    <h2>How the implied value is fitted</h2>
+    <p>Each category's multiple is the <strong>median market-cap / TVL</strong> of the protocols in that category whose token already trades. A category with fewer than three trading comparables falls back to the whole-universe median; a universe with none falls back to 0.25. The multiple is clamped to 0.02–5. Then:</p>
+    <p class="formula">implied = TVL &times; multiple &times; growth &times; maturity</p>
+    <p>growth is 1 + the 7-day TVL change (clamped to −60%…+150%) &times; 0.5; maturity is 0.6 + up to 0.4 for up to three years tracked with no token (unknown listing date counts as one year). No protocol name is ever special-cased: the same function scores every row. The table below shows every category's fit and how many trading protocols back it.</p>
+    <table id="fits">
+      <thead><tr><th>Category</th><th>Multiple</th><th>Comparables</th><th>Source</th></tr></thead>
+      <tbody id="fitrows"></tbody>
+    </table>
+  </section>
+</main>
+
+<footer>
+  <p>Data: the sealed snapshot's DefiLlama protocol records, fetched once for this competition; the snapshot's as-of date and source are shown above. Implied values are this radar's own claim, never a promise of a launch or a price. Farm plans are suggestions, not advice: check the protocol's own page before moving funds, and never pay to claim.</p>
+</footer>
+<script src="../data.js"></script>
+<script src="app.js"></script>
+</body>
+</html>
